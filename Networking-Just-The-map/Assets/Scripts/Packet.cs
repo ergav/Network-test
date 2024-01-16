@@ -50,7 +50,23 @@ public class Packet
     {
         int length = GetInt();
         string value = Encoding.ASCII.GetString(data, readPos, length);
+        readPos += length;
         return value;
+    }
+
+    public float GetFloat()
+    {
+        float value = BitConverter.ToSingle(data, readPos);
+        readPos += 4;
+        return value;
+    }
+    public Vector3 GetVector3()
+    {
+        return new Vector3(GetFloat(), GetFloat(), GetFloat());
+    }
+    public Quaternion GetQuaternion()
+    {
+        return new Quaternion(GetFloat(), GetFloat(), GetFloat(), GetFloat());
     }
     
     public void Add(byte data)
@@ -64,6 +80,12 @@ public class Packet
     public void Add(int data)
     {
         writableData.AddRange(BitConverter.GetBytes(data));
+    }
+
+    public void Add(String data)
+    {
+        Add(data.Length);
+        writableData.AddRange(Encoding.ASCII.GetBytes(data));
     }
     
     public enum PacketID

@@ -7,6 +7,8 @@ public class Client : MonoBehaviour
 {
     public static Client instance;
 
+    public string playerName = "Player1";
+    
     public string ip = "127.0.0.1";
     public int port = 25565;
     public int Id = 0;
@@ -25,8 +27,32 @@ public class Client : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void SetName(string name)
+    {
+        playerName = name;
+    }
+    
+    public void Connect()
     {
         tcp.Connect(ip, port);
+    }
+
+    public void JoinGame()
+    {
+        Packet packet = new Packet();
+        packet.Add((byte)Packet.PacketID.C_spawnPlayer);
+        packet.Add(playerName);
+        tcp.SendData(packet);
+    }
+
+    public void Disconnect()
+    {
+        tcp.Disconnect();
+
+        if (GameManager.instance.playerList.TryGetValue(Id, out Player player))
+        {
+            GameManager.instance.playerList.Remove(Id);
+            Destroy(player.gameObject);
+        }
     }
 }

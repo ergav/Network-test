@@ -82,4 +82,10 @@ public class ClientTCP
         byte packetID = packet.GetByte();
         GameManager.instance.handlers[packetID](packet);
     }
+
+    public void Disconnect()
+    {
+        stream.Close();
+        socket.Close();
+    }
 }
