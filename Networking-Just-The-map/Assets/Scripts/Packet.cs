@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -25,11 +26,18 @@ public class Packet
         writableData.InsertRange(0, BitConverter.GetBytes(writableData.Count));
         return writableData.ToArray();
     }
+
+    public byte[] ToUdp(int value)
+    {
+        writableData.InsertRange(0, BitConverter.GetBytes(writableData.Count));
+        writableData.InsertRange(0, BitConverter.GetBytes(value));
+        return writableData.ToArray();
+    }
     
     public byte GetByte()
     {
         byte value = data[readPos];
-        readPos += 4;
+        readPos ++;
         return value;
     }
     public byte[] GetBytes(int length)
@@ -82,10 +90,35 @@ public class Packet
         writableData.AddRange(BitConverter.GetBytes(data));
     }
 
+    public void Add(float data)
+    {
+        writableData.AddRange(BitConverter.GetBytes(data));
+    }
+
+    public void Add(bool data)
+    {
+        writableData.AddRange(BitConverter.GetBytes(data));
+    }
+    
     public void Add(String data)
     {
         Add(data.Length);
         writableData.AddRange(Encoding.ASCII.GetBytes(data));
+    }
+
+    public void Add(Vector3 data)
+    {
+        Add(data.x);
+        Add(data.y);
+        Add(data.z);
+    }
+
+    public void Add(Quaternion data)
+    {
+        Add(data.x);
+        Add(data.y);
+        Add(data.z);
+        Add(data.w);
     }
     
     public enum PacketID

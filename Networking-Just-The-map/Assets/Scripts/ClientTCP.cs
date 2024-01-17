@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ClientTCP
 {
-    private TcpClient socket;
+    public TcpClient socket;
     private NetworkStream stream;
     private byte[] recieveBuffer;
 
@@ -87,5 +88,7 @@ public class ClientTCP
     {
         stream.Close();
         socket.Close();
+        stream = null;
+        socket = null;
     }
 }

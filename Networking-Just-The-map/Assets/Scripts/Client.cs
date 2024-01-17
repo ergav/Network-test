@@ -14,6 +14,7 @@ public class Client : MonoBehaviour
     public int Id = 0;
 
     public ClientTCP tcp = new();
+    public ClientUDP udp = new();
     
     private void Awake()
     {
